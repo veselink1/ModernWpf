@@ -197,6 +197,11 @@ namespace ModernWpf
                 {
                     ColorsHelper.Current.UpdateBrushes(themeDictionary);
                 }
+
+                if (ThemeResources.Current.CanBeAccessedAcrossThreads)
+                {
+                    ThemeResources.Current.RefreshResources();
+                }
             }
         }
 
@@ -717,7 +722,8 @@ namespace ModernWpf
         {
             if (!_defaultThemeDictionaries.TryGetValue(key, out ResourceDictionary dictionary))
             {
-                dictionary = new ResourceDictionary { Source = GetDefaultSource(key) };
+                dictionary = new ResourceDictionary();
+                dictionary.MergedDictionaries.Add(new ResourceDictionary { Source = GetDefaultSource(key) });
                 _defaultThemeDictionaries[key] = dictionary;
             }
             return dictionary;
