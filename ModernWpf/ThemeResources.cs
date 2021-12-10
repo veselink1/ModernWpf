@@ -3,12 +3,15 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ModernWpf
 {
     public class ThemeResources : ResourceDictionaryEx, ISupportInitialize
     {
         private static ThemeResources _current;
+
+        private ApplicationTheme _applicationTheme;
 
         private ResourceDictionary _lightResources;
         private ResourceDictionary _darkResources;
@@ -252,8 +255,28 @@ namespace ModernWpf
             }
         }
 
+        internal void RefreshResources()
+        {
+            switch (_applicationTheme)
+            {
+                case ApplicationTheme.Dark:
+                    if (_darkResources != null)
+                    {
+                        RefreshThemeResources(_darkResources, ThemeManager.DarkKey);
+                    }
+                    return;
+                case ApplicationTheme.Light:
+                    if (_lightResources != null)
+                    {
+                        RefreshThemeResources(_lightResources, ThemeManager.LightKey);
+                    }
+                    return;
+            }
+        }
+
         internal void ApplyApplicationTheme(ApplicationTheme theme)
         {
+            _applicationTheme = theme;
             int targetIndex = DesignMode.DesignModeEnabled ? 1 : 0;
 
             if (SystemParameters.HighContrast)
@@ -264,7 +287,7 @@ namespace ModernWpf
                 {
                     if (CanBeAccessedAcrossThreads)
                     {
-                        RefreshHighContrastResources();
+                        RefreshThemeResources(_highContrastResources, ThemeManager.HighContrastKey);
                     }
                 }
                 else
@@ -279,12 +302,22 @@ namespace ModernWpf
                 if (theme == ApplicationTheme.Light)
                 {
                     EnsureLightResources();
+                    if (CanBeAccessedAcrossThreads)
+                    {
+                        RefreshThemeResources(_lightResources, ThemeManager.LightKey);
+                    }
+
                     MergedDictionaries.InsertOrReplace(targetIndex, _lightResources);
                     MergedDictionaries.RemoveIfNotNull(_darkResources);
                 }
                 else if (theme == ApplicationTheme.Dark)
                 {
                     EnsureDarkResources();
+                    if (CanBeAccessedAcrossThreads)
+                    {
+                        RefreshThemeResources(_darkResources, ThemeManager.DarkKey);
+                    }
+
                     MergedDictionaries.InsertOrReplace(targetIndex, _darkResources);
                     MergedDictionaries.RemoveIfNotNull(_lightResources);
                 }
@@ -390,13 +423,12 @@ namespace ModernWpf
             }
         }
 
-        private void RefreshHighContrastResources()
+        private void RefreshThemeResources(ResourceDictionary resources, string themeKey)
         {
-            Debug.Assert(_highContrastResources != null);
+            Debug.Assert(resources != null);
 
-            var hcResources = _highContrastResources;
-            var mergedDictionaries = hcResources.MergedDictionaries;
-            var oldDefault = ThemeManager.GetDefaultThemeDictionary(ThemeManager.HighContrastKey);
+            var mergedDictionaries = resources.MergedDictionaries;
+            var oldDefault = ThemeManager.GetDefaultThemeDictionary(themeKey);
 
             for (int i = 0; i < mergedDictionaries.Count; i++)
             {
@@ -407,7 +439,7 @@ namespace ModernWpf
                     newMD.SealValues();
                     if (md == oldDefault)
                     {
-                        ThemeManager.SetDefaultThemeDictionary(ThemeManager.HighContrastKey, newMD);
+                        ThemeManager.SetDefaultThemeDictionary(themeKey, newMD);
                     }
                     mergedDictionaries[i] = newMD;
                 }
