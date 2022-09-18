@@ -84,8 +84,8 @@
 
     <Duration x:Key="ScrollBarExpandDuration">00:00:00.1</Duration>
     <Duration x:Key="ScrollBarContractDuration">00:00:00.1</Duration>
-    <sys:Double x:Key="ScrollBarSize">16</sys:Double>
-    <sys:Double x:Key="SmallScrollThumbScale">0.125</sys:Double>
+    <sys:Double x:Key="ScrollBarSize">8</sys:Double>
+    <sys:Double x:Key="SmallScrollThumbScale">0.25</sys:Double>
     <sys:Double x:Key="SmallScrollThumbOffset">-2</sys:Double>
     <sys:Double x:Key="ScrollBarButtonArrowIconFontSize">8</sys:Double>
     <sys:TimeSpan x:Key="ScrollBarExpandBeginTime">00:00:00.40</sys:TimeSpan>
@@ -169,8 +169,8 @@
         <Rectangle
             x:Name="ThumbVisual"
             Fill="{TemplateBinding Background}"
-            RadiusX="{TemplateBinding primitives:ControlHelper.CornerRadius, Converter={StaticResource TopLeftCornerRadiusDoubleValueConverter}}"
-            RadiusY="{TemplateBinding primitives:ControlHelper.CornerRadius, Converter={StaticResource BottomRightCornerRadiusDoubleValueConverter8x}}"
+            RadiusX="4"
+            RadiusY="4"
             SnapsToDevicePixels="True" />
         <ControlTemplate.Triggers>
             <Trigger Property="primitives:ScrollBarThumbHelper.IsExpanded" Value="True">

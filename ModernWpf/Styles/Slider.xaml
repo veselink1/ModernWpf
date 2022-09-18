@@ -42,17 +42,23 @@
     </Style>
 
     <Style TargetType="Thumb" x:Key="SliderThumbStyle">
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderThickness" Value="4" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SystemControlDisabledChromeHighBrush}" />
         <Setter Property="Background" Value="{DynamicResource SliderThumbBackground}" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
                     <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{DynamicResource SliderThumbCornerRadius}" />
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                        CornerRadius="{DynamicResource SliderThumbCornerRadius}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource SliderThumbCornerRadius}" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

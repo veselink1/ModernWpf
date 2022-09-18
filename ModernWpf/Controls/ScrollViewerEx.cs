@@ -25,6 +25,11 @@ namespace ModernWpf.Controls
             {
                 base.OnMouseWheel(e);
             }
+
+            if (ScrollableWidth > 0 && VerticalScrollBarVisibility == ScrollBarVisibility.Disabled)
+            {
+                ScrollToHorizontalOffset(HorizontalOffset - e.Delta);
+            }
         }
 
         /*private bool CanScrollVerticallyInDirection(bool inPositiveDirection)

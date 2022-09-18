@@ -60,6 +60,9 @@
                         Padding="{TemplateBinding Padding}"
                         SnapsToDevicePixels="True">
                         <Grid>
+                            <Grid.Background>
+                                <SolidColorBrush Color="{DynamicResource MicaPrimaryColor}" Opacity="{DynamicResource MicaOpacity}" />
+                            </Grid.Background>
                             <Grid x:Name="ContentGrid">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
